@@ -23,6 +23,10 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 API_KEY = os.getenv("HELIUS_API_KEY")
+if not API_KEY:
+    logger.error("HELIUS_API_KEY not found in environment variables. Please check your .env file.")
+    exit(1)
+
 BASE_URL = "https://api-mainnet.helius-rpc.com/v0"
 
 # Known DEX program IDs
@@ -47,6 +51,8 @@ def fetch_program_transactions(
     }
     if before_sig:
         params["before"] = before_sig
+    
+    logger.debug(f"Fetching transactions for {program_id[:8]}... (before: {before_sig})")
     
     for attempt in range(3):
         try:
@@ -79,7 +85,10 @@ def extract_swaps(
         batch = fetch_program_transactions(program_id, before_sig)
 
         if not batch:
+            logger.info("No more transactions found.")
             break
+        
+        logger.info(f"Fetched batch of {len(batch)} transactions...")
 
         for raw_tx in batch:
             #Check date boundary
@@ -97,13 +106,14 @@ def extract_swaps(
         before_sig = batch[-1].get("signature")
         time.sleep(0.1) # rate limit respect
 
-        if total % 500 == 0 and total > 0:
+        if total % 100 == 0 and total > 0:
             logger.info(f"Progress: {total} swaps extracted...")
         
 def main():
     parser = argparse.ArgumentParser(description="Extract Solana DEX swap")
     parser.add_argument("--program", default="RAYDIUM", help="DEX program name")
-    parser.add_argument("--days", type=int, default=1, help="Days to look back")
+    parser.add_argument("--days", type=float, default=1.0, help="Days to look back")
+    parser.add_argument("--limit", type=int, default=None, help="Max number of swaps to extract")
     args = parser.parse_args()
 
     start_date = datetime.now() - timedelta(days=args.days)
@@ -111,8 +121,12 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
 
     swaps = []
+    logger.info(f"Starting extraction for {args.program} from {start_date}...")
     for swap in extract_swaps(args.program, start_date):
         swaps.append(swap.__dict__)
+        if args.limit and len(swaps) >= args.limit:
+            logger.info(f"Reached limit of {args.limit} swaps. Stopping.")
+            break
 
     output_file = output_dir / f"{args.program.lower()}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
     with open(output_file, "w") as f:
