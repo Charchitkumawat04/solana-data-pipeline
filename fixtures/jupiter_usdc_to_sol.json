@@ -1,0 +1,47 @@
+{
+  "blockTime": 1791806400,
+  "slot": 372000000,
+  "meta": {
+    "err": null,
+    "fee": 15000,
+    "preBalances": [5000000000, 2039280, 1000000000],
+    "postBalances": [6484985000, 2039280, 1000000000],
+    "preTokenBalances": [
+      {
+        "accountIndex": 1,
+        "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+        "owner": "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin",
+        "uiTokenAmount": {"amount": "500000000", "decimals": 6, "uiAmount": 500.0, "uiAmountString": "500"}
+      }
+    ],
+    "postTokenBalances": [
+      {
+        "accountIndex": 1,
+        "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+        "owner": "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin",
+        "uiTokenAmount": {"amount": "250000000", "decimals": 6, "uiAmount": 250.0, "uiAmountString": "250"}
+      }
+    ],
+    "innerInstructions": [
+      {
+        "index": 0,
+        "instructions": [
+          {"programId": "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8", "accounts": [], "data": "routeHop"}
+        ]
+      }
+    ]
+  },
+  "transaction": {
+    "signatures": ["5VERv8NMvzbJMEkV8xnrLkEaWRtSz9CosKDYjCJjBRnbJLgp8uirBgmQpjKhoR4tjF3ZpRzrFmBV6UjKdiSZkQUW"],
+    "message": {
+      "accountKeys": [
+        {"pubkey": "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin", "signer": true, "writable": true},
+        {"pubkey": "3emsAVdmGKERbHjmGfQ6oZ1e35dkf5iYcS6U4CPKFVaa", "signer": false, "writable": true},
+        {"pubkey": "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4", "signer": false, "writable": false}
+      ],
+      "instructions": [
+        {"programId": "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4", "accounts": [], "data": "sharedAccountsRoute"}
+      ]
+    }
+  }
+}
